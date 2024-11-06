@@ -123,7 +123,7 @@ export class Hero extends Component {
     this.infoDisplay.addChild(lvl);
   }
 
-  attack(target: Hero, callback = () => {}) {
+  attack(target: Hero, callback: () => void) {
     target.battleMode
       .getChildByName("HealthBar")
       .getComponent(HealthBar)
@@ -162,6 +162,12 @@ export class Hero extends Component {
         .getComponent(Animation);
       animations.once(Animation.EventType.FINISHED, callback);
       animations.play();
+    } else {
+      const animations = this.node
+        .getChildByName("Body")
+        .getComponent(Animation);
+      animations.once(Animation.EventType.FINISHED, callback);
+      animations.play("Jump");
     }
   }
 

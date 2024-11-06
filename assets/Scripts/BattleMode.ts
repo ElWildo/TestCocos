@@ -33,7 +33,7 @@ export class BattleMode extends Component {
     this.passTurn(TURN.HEROES);
   }
 
-  async passTurn(turn: TURN) {
+  passTurn(turn: TURN) {
     switch (turn) {
       case TURN.START:
         this.endBattleMessage.active = false;
@@ -51,9 +51,11 @@ export class BattleMode extends Component {
         this.enemySide.getComponent(EnemySide).battleMode = true;
         break;
       case TURN.END_WIN:
-        await this.assignExp(() => {
-          this.endBattle();
-          this.endBattleMessage.getChildByName("WinMessage").active = true;
+        this.assignExp(() => {
+          setTimeout(() => {
+            this.endBattle();
+            this.endBattleMessage.getChildByName("WinMessage").active = true;
+          }, 100);
         });
         break;
       case TURN.END_LOSE:
@@ -65,7 +67,8 @@ export class BattleMode extends Component {
     }
   }
 
-  async assignExp(callback: () => void) {
+  assignExp(callback: () => void) {
+    this.fightCounter++;
     this.heroesSide.children.forEach(async (child) => {
       if (child.getComponent(Hero).isAlive()) {
         await child.getComponent(Hero).addExpAnim(callback);
@@ -75,8 +78,6 @@ export class BattleMode extends Component {
     if (this.fightCounter == 5) {
       this.fightCounter = 0;
       this.GameManager.unlockRandomHero();
-    } else {
-      this.fightCounter++;
     }
   }
 
