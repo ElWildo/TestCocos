@@ -29,12 +29,21 @@ export class EnemySide extends Component {
   public battleMode: boolean = false;
 
   initEnemySide() {
-    this.enemy =
+    const enemyTemp =
       this.gameManager.herosListInGame[
         Math.floor(Math.random() * this.gameManager.herosListInGame.length)
       ];
+    this.enemy = {
+      name: "Enemy",
+      health: enemyTemp.health,
+      att_power: enemyTemp.att_power * 2.5,
+      exp: enemyTemp.exp,
+      lvl: enemyTemp.lvl,
+      selected: enemyTemp.selected,
+      unlocked: enemyTemp.unlocked,
+      style: enemyTemp.style,
+    };
     const enemyNode = instantiate(this.HeroPrefab);
-    this.enemy.att_power *= 2.5;
     enemyNode.getComponent(Hero).initHero(this.enemy);
     enemyNode.getComponent(UITransform).setContentSize(200, 200);
     enemyNode
