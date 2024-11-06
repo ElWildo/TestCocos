@@ -35,7 +35,7 @@ export class HeroSide extends Component {
     this.activeHeroes.forEach((hero, i) => {
       const heroNode = instantiate(this.HeroPrefab);
       heroNode.getComponent(Hero).initHero(hero);
-      heroNode.name = hero.name;
+      // heroNode.name = hero.name;
       heroNode.setPosition(
         heroNode.position.x,
         y0 -
@@ -109,10 +109,13 @@ export class HeroSide extends Component {
   addExp() {}
 
   protected async onEnable(): Promise<void> {
+    await this.initHeroSide();
+    await this.addBattleButtons();
+  }
+
+  protected async onDisable(): Promise<void> {
     await this.node.destroyAllChildren();
     this.activeHeroes = [];
     this.battleMode = false;
-    await this.initHeroSide();
-    await this.addBattleButtons();
   }
 }

@@ -89,10 +89,13 @@ export class EnemySide extends Component {
   }
 
   protected async onEnable(): Promise<void> {
+    await this.initEnemySide();
+    await this.addBattleButtons();
+  }
+
+  protected async onDisable(): Promise<void> {
     await this.node.destroyAllChildren();
     this.enemy = null;
     this.battleMode = false;
-    await this.initEnemySide();
-    await this.addBattleButtons();
   }
 }
