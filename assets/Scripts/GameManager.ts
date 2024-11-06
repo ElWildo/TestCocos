@@ -6,6 +6,7 @@ import {
   Node,
   Prefab,
   Sprite,
+  sys,
   UIOpacity,
   UITransform,
 } from "cc";
@@ -35,12 +36,21 @@ export class GameManager extends Component {
     this.setCurrentGameState(GameState.HERO_SELECTION);
   }
 
+  saveState(state: GameState) {
+    const save = {
+      lastState: state,
+      heroList: this.herosListInGame,
+    };
+    sys.localStorage.setItem("userSave", JSON.stringify(save));
+  }
+
   initChildrenRef() {
     this.BattleMode = this.node.getChildByName("BattleMode");
     this.HeroSelection = this.node.getChildByName("HeroSelection");
   }
 
   setCurrentGameState(value: GameState) {
+    this.saveState(value);
     switch (value) {
       case GameState.INIT:
         this.initChildrenRef();

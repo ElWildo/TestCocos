@@ -51,9 +51,10 @@ export class BattleMode extends Component {
         this.enemySide.getComponent(EnemySide).battleMode = true;
         break;
       case TURN.END_WIN:
-        await this.assignExp();
-        this.endBattle();
-        this.endBattleMessage.getChildByName("WinMessage").active = true;
+        await this.assignExp(() => {
+          this.endBattle();
+          this.endBattleMessage.getChildByName("WinMessage").active = true;
+        });
         break;
       case TURN.END_LOSE:
         this.endBattle();
@@ -64,13 +65,14 @@ export class BattleMode extends Component {
     }
   }
 
-  assignExp() {
-    this.heroesSide.children.forEach((child) => {
-      child.getComponent(Hero).addExp();
-      this.GameManager.expHero(child.getComponent(Hero).Hero_Name);
+  async assignExp(callback: () => void) {
+    this.heroesSide.children.forEach(async (child) => {
+      if (child.getComponent(Hero).isAlive()) {
+        await child.getComponent(Hero).addExpAnim(callback);
+        this.GameManager.expHero(child.getComponent(Hero).Hero_Name);
+      }
     });
-    if (this.fightCounter == 1) {
-      // This needs to be changed to 5 later
+    if (this.fightCounter == 5) {
       this.fightCounter = 0;
       this.GameManager.unlockRandomHero();
     } else {

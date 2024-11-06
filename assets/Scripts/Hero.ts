@@ -123,22 +123,22 @@ export class Hero extends Component {
     this.infoDisplay.addChild(lvl);
   }
 
-  attack(target: Hero, callback = () => null) {
+  attack(target: Hero, callback = () => {}) {
     target.battleMode
       .getChildByName("HealthBar")
       .getComponent(HealthBar)
       .updateHealth(this.Hero_Att_Power);
+    const enemyDamageMessage =
+      target.battleMode.getChildByName("DamageMessage");
+    enemyDamageMessage
+      .getChildByName("DamageReceived")
+      .getComponent(Label).string = "-" + this.Hero_Att_Power;
+    enemyDamageMessage.getComponent(Animation).play();
     const animations = this.node.getChildByName("Body").getComponent(Animation);
     animations.once(Animation.EventType.FINISHED, callback);
     this.node.parent.position.x < 0
-      ? this.node
-          .getChildByName("Body")
-          .getComponent(Animation)
-          .play("AttackFromRight")
-      : this.node
-          .getChildByName("Body")
-          .getComponent(Animation)
-          .play("AttackFromLeft");
+      ? animations.play("AttackFromRight")
+      : animations.play("AttackFromLeft");
   }
 
   healAll() {
@@ -148,13 +148,20 @@ export class Hero extends Component {
       .updateHealth(-this.Hero_Health);
   }
 
-  addExp() {
-    if (
+  isAlive() {
+    return (
       this.battleMode.getChildByName("HealthBar").getComponent(ProgressBar)
-        .progress < 1 &&
-      this.Hero_Exp + 1 == 5
-    ) {
-      console.log("exp animation!");
+        .progress < 1
+    );
+  }
+
+  async addExpAnim(callback: () => void) {
+    if (this.Hero_Exp + 1 >= 5) {
+      const animations = this.battleMode
+        .getChildByName("LevelUpMessages")
+        .getComponent(Animation);
+      animations.once(Animation.EventType.FINISHED, callback);
+      animations.play();
     }
   }
 
