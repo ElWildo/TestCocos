@@ -14,6 +14,11 @@ const { ccclass, property } = _decorator;
 import { herosList } from "../Data/heroList_data";
 import { Hero, HeroData } from "./Hero";
 
+interface SaveState {
+  lastState: GameState;
+  heroList: HeroData[];
+}
+
 enum GameState {
   INIT,
   HERO_SELECTION,
@@ -26,18 +31,20 @@ export class GameManager extends Component {
   HeroPrefab: Prefab = null;
   public BattleMode: Node = null;
   public HeroSelection: Node = null;
-  public herosListInGame: HeroData[] = [...herosList];
+  public herosListInGame: HeroData[] = (
+    JSON.parse(sys.localStorage.getItem("userSave")) as SaveState
+  ).heroList ?? [...herosList];
 
   protected onLoad(): void {
     this.setCurrentGameState(GameState.INIT);
   }
 
   start() {
-    this.setCurrentGameState(GameState.HERO_SELECTION);
+    this.returnToSelection();
   }
 
   saveState(state: GameState) {
-    const save = {
+    const save: SaveState = {
       lastState: state,
       heroList: this.herosListInGame,
     };
@@ -102,6 +109,7 @@ export class GameManager extends Component {
     );
     unlockedHeero.unlocked = true;
   }
+
   resetHeroList() {
     this.herosListInGame.forEach((hero) => {
       hero.selected = false;
@@ -135,6 +143,7 @@ export class GameManager extends Component {
           .getChildByName("Button")
           .on(Node.EventType.TOUCH_END, () => this.selectHero(newHero, i));
         this.HeroSelection.addChild(newHero);
+        console.log(this.herosListInGame[i]);
         newHero.getComponent(Hero).initHero(this.herosListInGame[i]);
 
         if (i < this.herosListInGame.length / 2) {
