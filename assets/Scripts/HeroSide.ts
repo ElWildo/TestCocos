@@ -35,7 +35,6 @@ export class HeroSide extends Component {
     this.activeHeroes.forEach((hero, i) => {
       const heroNode = instantiate(this.HeroPrefab);
       heroNode.getComponent(Hero).initHero(hero);
-      // heroNode.name = hero.name;
       heroNode.setPosition(
         heroNode.position.x,
         y0 -
