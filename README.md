@@ -7,7 +7,8 @@ but able to build for android, ios and desktop as well
 
 To run the whole project you will need Cocos Creator 3.8 avaialble for free [here](https://www.cocos.com/en/creator-download)
 
-Once installed you should be able to import this project or open it with it.
+Once installed you can add the project into the Cocos Dashboard using the Add Project button in the Project tab and add the unzipped folder
+It's suggested to keep the unzipped folder to a low lever folder. (Close to C://) as the project has a lot of subfolder and may cause problem with the Path length
 
 ## Run locally
 
