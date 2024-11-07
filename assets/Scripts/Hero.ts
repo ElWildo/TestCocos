@@ -83,17 +83,12 @@ export class Hero extends Component {
     });
   }
 
-  initInfoDisplay() {
-    const name = instantiate(this.infoLine);
-    const health = instantiate(this.infoLine);
-    const att_power = instantiate(this.infoLine);
-    const exp = instantiate(this.infoLine);
-    const lvl = instantiate(this.infoLine);
-    name.getComponent(Label).string = "Name:";
-    health.getComponent(Label).string = "Health:";
-    att_power.getComponent(Label).string = "Atttack Power:";
-    exp.getComponent(Label).string = "Experience:";
-    lvl.getComponent(Label).string = "Level:";
+  async initInfoDisplay() {
+    const name = this.infoDisplay.getChildByName("Name");
+    const health = this.infoDisplay.getChildByName("Health");
+    const att_power = this.infoDisplay.getChildByName("Attack Power");
+    const exp = this.infoDisplay.getChildByName("Experience");
+    const lvl = this.infoDisplay.getChildByName("Level");
     name.getChildByName("InfoValue").getComponent(Label).string =
       this.Hero_Name;
     health.getChildByName("InfoValue").getComponent(Label).string =
@@ -116,11 +111,6 @@ export class Hero extends Component {
       att_power.position.z
     );
     lvl.position.set(exp.position.x, exp.position.y - 25, exp.position.z);
-    this.infoDisplay.addChild(name);
-    this.infoDisplay.addChild(health);
-    this.infoDisplay.addChild(att_power);
-    this.infoDisplay.addChild(exp);
-    this.infoDisplay.addChild(lvl);
   }
 
   attack(target: Hero, callback: () => void) {
