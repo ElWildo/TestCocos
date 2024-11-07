@@ -33,7 +33,7 @@ export class GameManager extends Component {
   public HeroSelection: Node = null;
   public herosListInGame: HeroData[] = (
     JSON.parse(sys.localStorage.getItem("userSave")) as SaveState
-  ).heroList ?? [...herosList];
+  )?.heroList ?? [...herosList];
 
   protected onLoad(): void {
     this.setCurrentGameState(GameState.INIT);
